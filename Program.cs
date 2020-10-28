@@ -4,48 +4,40 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace ConsoleAppSeriLog
 {
     class Program
     {
+        static IConfigurationRoot _configuration;
+
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
 
-            var configuration = new ConfigurationBuilder()
+            _configuration = new ConfigurationBuilder()
                                     .SetBasePath(Directory.GetCurrentDirectory())
                                     .AddJsonFile(AppDomain.CurrentDomain.BaseDirectory + "\\appsettings.json", optional: false, reloadOnChange: true)
                                     .AddEnvironmentVariables()
                                     .Build();
 
-            var serilogLogger = new LoggerConfiguration()
-                    .ReadFrom.Configuration(configuration)
-                    .CreateLogger();
+            int intervalInSeconds = _configuration.GetSection("healthlog").GetValue<int>("intervalInSeconds");
 
-            Log.Logger = serilogLogger;
-
-            Task.Run(() => { RepeatWriteLog(configuration); });
-
+            System.Timers.Timer aTimer = new System.Timers.Timer();
+            aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            aTimer.Interval = intervalInSeconds * 1000;
+            aTimer.Enabled = true;
 
             Console.ReadLine();
         }
-
-        private static Task RepeatWriteLog(IConfigurationRoot configuration)
+        // Specify what you want to happen when the Elapsed event is raised.
+        private static void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            string fullPath = configuration.GetSection("healthlog").GetValue<string>("fullPath");
-            int intervalInSeconds = configuration.GetSection("healthlog").GetValue<int>("intervalInSeconds");
-            int retainedFileCountLimit = configuration.GetSection("healthlog").GetValue<int>("retainedFileCountLimit");
-            long fileSizeLimitBytes = configuration.GetSection("healthlog").GetValue<long>("fileSizeLimitBytes");
-
-            var healthlog = new LoggerConfiguration()
-                .WriteTo.File(fullPath, fileSizeLimitBytes: fileSizeLimitBytes, rollOnFileSizeLimit: true, retainedFileCountLimit: retainedFileCountLimit)
-                .CreateLogger();
-
-            while (true)
+            string fullPath = _configuration.GetSection("healthlog").GetValue<string>("fullPath");
+            using (TextWriter tw = new StreamWriter(path: fullPath, append: false))
             {
-                healthlog.Information($"{DateTime.Now}");
-                Thread.Sleep(1000 * intervalInSeconds);
+                tw.WriteLine(DateTime.Now);
             }
         }
     }
