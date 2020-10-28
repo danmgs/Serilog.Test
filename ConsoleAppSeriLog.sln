@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppSeriLog", "ConsoleAppSeriLog.csproj", "{96782A66-08F9-4E5C-B720-9FDD69B200A7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{96782A66-08F9-4E5C-B720-9FDD69B200A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96782A66-08F9-4E5C-B720-9FDD69B200A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96782A66-08F9-4E5C-B720-9FDD69B200A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96782A66-08F9-4E5C-B720-9FDD69B200A7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FD6E0852-3D73-4984-A9F6-8C32621AAFF6}
+	EndGlobalSection
+EndGlobal
